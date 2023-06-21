@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Standard Order - Elikandle</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <style>
+    .candle-option input[type="radio"]:checked + .candle-image {
+      border: 2px solid #f29870;
+    }
+
+    .candle-option input[type="radio"]:checked ~ .candle-details {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="bg-gray-800 py-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl text-white font-bold">Elikandle</h1>
+      <nav>
+        <ul class="flex space-x-4 text-white">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="custom-order.html">Custom Order</a></li>
+          <li><a href="standard-order.html">Standard Order</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-8">
+    <section>
+      <h2 class="text-3xl font-bold mb-4">Standard Order</h2>
+      <p class="mb-6">Choose from our selection of pre-designed candles available for standard orders. These candles are crafted with care using our signature scents and high-quality ingredients.</p>
+      <p class="mb-6">To place a standard order, please select your desired candle from the options below and provide your contact information. We will get back to you to confirm the order, provide the final price, and arrange for payment and delivery.</p>
+      
+      <!-- Standard Order Form -->
+      <form id="standard-order-form" action="[YOUR_FORM_ENDPOINT]" method="POST">
+   
+        
+          <!-- Size Options -->
+<div class="mt-8">
+    <label for="candle-size" class="block font-bold">Choose a Size:</label>
+    <select id="candle-size" name="candle-size" class="border border-gray-300 rounded px-3 py-2" required>
+      <option value="" disabled selected>Select a Size</option>
+      <option value="small">Small</option>
+      <option value="medium">Medium</option>
+      <option value="large">Large</option>
+    </select>
+  </div>
+  
+  <!-- Scent Options -->
+  <div class="mt-8">
+    <label for="candle-scent" class="block font-bold">Choose a Scent:</label>
+    <select id="candle-scent" name="candle-scent" class="border border-gray-300 rounded px-3 py-2" required>
+      <option value="" disabled selected>Select a Scent</option>
+      <option value="lavender">Lavender</option>
+      <option value="rose">Rose</option>
+      <option value="sandalwood">Sandalwood</option>
+    </select>
+  </div>
+  
+  <!-- Display Image and Price -->
+  <div class="mt-8">
+    <div id="selected-candle" class="flex items-center">
+      <div id="selected-image" class="w-20 h-20 bg-gray-200"></div>
+      <div id="selected-details" class="ml-4">
+        <p class="font-bold text-lg mb-2" id="selected-title"></p>
+        <p class="text-gray-600" id="selected-size"></p>
+        <p class="text-gray-600" id="selected-scent"></p>
+        <p class="text-gray-600" id="selected-price"></p>
+      </div>
+    </div>
+  </div>
+  
+            
+        <!-- Mold Options -->
+        <div class="mt-8">
+            <label for="mold" class="block font-bold">Choose a Mold:</label>
+            <select id="mold" name="mold" class="border border-gray-300 rounded px-3 py-2" required>
+            <option value="" disabled selected>Select a Mold</option>
+            <option value="meditation">Meditation</option>
+            <option value="graduation">Graduation</option>
+            <option value="wedding">Wedding</option>
+            <option value="dog">Dog</option>
+            </select>
+        </div>
+  
+        <div class="mt-8">
+          <label for="name" class="block font-bold">Your Name:</label>
+          <input type="text" id="name" name="name" class="border border-gray-300 rounded px-3 py-2" required>
+        </div>
+        <div class="mt-4">
+          <label for="email" class="block font-bold">Email Address:</label>
+          <input type="email" id="email" name="email" class="border border-gray-300 rounded px-3 py-2" required>
+        </div>
+        <div class="mt-4">
+          <label for="phone" class="block font-bold">Phone Number:</label>
+          <input type="tel" id="phone" name="phone" class="border border-gray-300 rounded px-3 py-2" required>
+        </div>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-6">Submit Order</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="bg-gray-800 py-4">
+    <div class="container mx-auto">
+      <p class="text-white text-center">Follow us on <a href="https://www.linkedin.com/company/elikandle" target="_blank" rel="noopener noreferrer" class="underline">LinkedIn</a>.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const sizeSelect = document.getElementById('candle-size');
+    const scentSelect = document.getElementById('candle-scent');
+    const selectedImage = document.getElementById('selected-image');
+    const selectedTitle = document.getElementById('selected-title');
+    const selectedSize = document.getElementById('selected-size');
+    const selectedScent = document.getElementById('selected-scent');
+    const selectedPrice = document.getElementById('selected-price');
+  
+    sizeSelect.addEventListener('change', updateSelectedCandle);
+    scentSelect.addEventListener('change', updateSelectedCandle);
+  
+    function updateSelectedCandle() {
+      const selectedSizeValue = sizeSelect.value;
+      const selectedScentValue = scentSelect.value;
+      let imageSrc = '';
+      let title = '';
+      let size = '';
+      let scent = '';
+      let price = '';
+  
+      if (selectedSizeValue === 'small') {
+        imageSrc = 'small_candle_image.jpg';
+        title = 'Small Candle';
+        size = 'Size: Small';
+        price = 'Price: $XX';
+      } else if (selectedSizeValue === 'medium') {
+        imageSrc = 'medium_candle_image.jpg';
+        title = 'Medium Candle';
+        size = 'Size: Medium';
+        price = 'Price: $XX';
+      } else if (selectedSizeValue === 'large') {
+        imageSrc = 'large_candle_image.jpg';
+        title = 'Large Candle';
+        size = 'Size: Large';
+        price = 'Price: $XX';
+      }
+  
+      if (selectedScentValue === 'lavender') {
+        scent = 'Scent: Lavender';
+      } else if (selectedScentValue === 'rose') {
+        scent = 'Scent: Rose';
+      } else if (selectedScentValue === 'sandalwood') {
+        scent = 'Scent: Sandalwood';
+      }
+  
+      selectedImage.style.backgroundImage = `url(${imageSrc})`;
+      selectedTitle.textContent = title;
+      selectedSize.textContent = size;
+      selectedScent.textContent = scent;
+      selectedPrice.textContent = price;
+    }
+  </script>
+  
+  
+  
+</body>
+
+</html>
