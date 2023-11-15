@@ -115,6 +115,60 @@
     </div>
   </footer>
 
+  <div class="relative z-10 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="modal">
+    <!--
+      Background backdrop, show/hide based on modal state.
+  
+      Entering: "ease-out duration-300"
+        From: "opacity-0"
+        To: "opacity-100"
+      Leaving: "ease-in duration-200"
+        From: "opacity-100"
+        To: "opacity-0"
+    -->
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+  
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <!--
+          Modal panel, show/hide based on modal state.
+  
+          Entering: "ease-out duration-300"
+            From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            To: "opacity-100 translate-y-0 sm:scale-100"
+          Leaving: "ease-in duration-200"
+            From: "opacity-100 translate-y-0 sm:scale-100"
+            To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        -->
+        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+          <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+              <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">
+
+                  <g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+                    <polygon points="37.95,64.44 23.78,50.27 30.85,43.2 37.95,50.3 59.15,29.1 66.22,36.17 " style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,158,4); fill-rule: nonzero; opacity: 1;" transform="  matrix(1 0 0 1 0 0) "/>
+                    <path d="M 45 90 C 20.187 90 0 69.813 0 45 C 0 20.187 20.187 0 45 0 c 24.813 0 45 20.187 45 45 C 90 69.813 69.813 90 45 90 z M 45 10 c -19.299 0 -35 15.701 -35 35 s 15.701 35 35 35 s 35 -15.701 35 -35 S 64.299 10 45 10 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(0,158,4); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/>
+                  </g>
+                  </svg>
+              </div>
+              <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Order successfully sent</h3>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">Your order has successfuly been sent to our servers.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <button type="button" class="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto" onclick="dismissModal()">Okay</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
   <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
@@ -125,6 +179,8 @@
     const selectedSize = document.getElementById('selected-size');
     const selectedScent = document.getElementById('selected-scent');
     const selectedPrice = document.getElementById('selected-price');
+
+    const modal = document.getElementById('modal');
   
     sizeSelect.addEventListener('change', updateSelectedCandle);
     scentSelect.addEventListener('change', updateSelectedCandle);
@@ -163,11 +219,20 @@
       selectedPrice.textContent = "Price: $" + price;
     }
 
-    $("#submit").on("click", async e =>{
+    $("#submit").on("click", e =>{
       e.preventDefault()
-      await fetch(`https://docs.google.com/forms/d/e/1FAIpQLSfYlJLk22YEosGi2w0fJlJqEO2zokOvWFenp1nv_xogf021MA/formResponse?submit=Submit&usp=pp_url&entry.1787969660=${$("[name=candle-scent]").val()}&entry.1348480402=${$("[name=candle-size]").val()}&entry.212762989=${$("[name=mold]").val()}&entry.1649199031=${$("[name=name]").val()}&entry.415587158=${$("[name=email]").val()}&entry.2141702558=${$("[name=phone]").val()}`)
-      alert("Successfully sent request. You should not see this")
+      fetch(`https://docs.google.com/forms/d/e/1FAIpQLSfYlJLk22YEosGi2w0fJlJqEO2zokOvWFenp1nv_xogf021MA/formResponse?submit=Submit&usp=pp_url&entry.1787969660=${$("[name=candle-scent]").val()}&entry.1348480402=${$("[name=candle-size]").val()}&entry.212762989=${$("[name=mold]").val()}&entry.1649199031=${$("[name=name]").val()}&entry.415587158=${$("[name=email]").val()}&entry.2141702558=${$("[name=phone]").val()}`)
+      .then(() => {alert("You should not see this")})
+      .catch(activateModal)
     })
+
+    const dismissModal = () => {
+      modal.classList.add('hidden');
+    }
+
+    const activateModal = () => {
+      modal.classList.remove('hidden');
+    }
   </script>
   
   
